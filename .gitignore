@@ -1,3 +1,29 @@
+# Project
 .remember/
+plans/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Vite
+.vite/
+*.local
+
+# TypeScript build cache
+*.tsbuildinfo
+node_modules/.tmp/
+
+# macOS
 .DS_Store
-node_modules
+
+# Editor
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
