@@ -4,4 +4,5 @@ import themeOptions from '@tricentis/aura/constants/themeOptions.js';
 export const theme = extendTheme({
   ...themeOptions,
   defaultColorScheme: 'light',
+  colorSchemeSelector: 'data-mui-color-scheme',
 });
