@@ -31,8 +31,8 @@ export default function BurnRateSVG({ used, budget, renewalDate, estimatedExhaus
   }
 
   const barH = 20;
-  const svgH = 56;
-  const barY = 8;
+  const svgH = 60;
+  const barY = 12;
 
   const healthColor = isAtRisk ? theme.palette.error.main : theme.palette.success.main;
   const usedColor = isAtRisk ? theme.palette.error.light : theme.palette.success.light;
@@ -70,14 +70,33 @@ export default function BurnRateSVG({ used, budget, renewalDate, estimatedExhaus
           strokeWidth={1.5}
         />
         {/* Labels */}
-        <text x={`${todayPct * 100}%`} y={svgH} textAnchor="middle" fontSize={11} fill={theme.palette.text.secondary}>
-          Today
-        </text>
-        {exhaustionPct !== null && exhaustionPct <= 1.02 && (
-          <text x={`${Math.min(exhaustionPct * 100, 95)}%`} y={svgH} textAnchor="middle" fontSize={11} fill={healthColor}>
-            Est. end
-          </text>
-        )}
+        {(() => {
+          const tooClose = exhaustionPct !== null && exhaustionPct <= 1.02 && Math.abs(exhaustionPct - todayPct) < 0.1;
+          return (
+            <>
+              <text
+                x={`${todayPct * 100}%`}
+                y={tooClose ? svgH - 13 : svgH}
+                textAnchor="middle"
+                fontSize={11}
+                fill={theme.palette.text.secondary}
+              >
+                Today
+              </text>
+              {exhaustionPct !== null && exhaustionPct <= 1.02 && (
+                <text
+                  x={`${Math.min(exhaustionPct * 100, 95)}%`}
+                  y={svgH}
+                  textAnchor="middle"
+                  fontSize={11}
+                  fill={healthColor}
+                >
+                  Est. end
+                </text>
+              )}
+            </>
+          );
+        })()}
         <text x="100%" y={svgH} textAnchor="end" fontSize={11} fill={theme.palette.text.secondary}>
           Renewal
         </text>
