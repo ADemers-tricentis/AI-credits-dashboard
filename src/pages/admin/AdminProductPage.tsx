@@ -17,6 +17,7 @@ import ChipStatus from '@tricentis/aura/components/ChipStatus.js';
 import ProductBucketCard from '../../components/ProductBucketCard';
 import BurnRateCard from '../../components/BurnRateCard';
 import SearchFilters from '../../components/SearchFilters';
+import CSVExportButton from '../../components/CSVExportButton';
 import { PRODUCTS, PROJECTS, USERS, DAILY_USAGE } from '../../data/mock';
 import { useAppContext } from '../../context/AppContext';
 import type { ProductId } from '../../types';
@@ -86,12 +87,15 @@ export default function AdminProductPage() {
           <Typography variant="subtitle1" fontWeight={600}>
             {isAIWorkspace ? 'Teams' : 'Projects'} ({filtered.length})
           </Typography>
-          <SearchFilters
-            projectQuery={projectQuery}
-            userQuery={userQuery}
-            onProjectChange={setProjectQuery}
-            onUserChange={setUserQuery}
-          />
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+            <CSVExportButton level="project" productId={productId} />
+            <SearchFilters
+              projectQuery={projectQuery}
+              userQuery={userQuery}
+              onProjectChange={setProjectQuery}
+              onUserChange={setUserQuery}
+            />
+          </Box>
         </Box>
 
         <Table>

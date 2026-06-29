@@ -33,7 +33,7 @@ export default function AdminDashboardPage() {
         </Box>
         <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
           <DateRangeFilter />
-          <CSVExportButton />
+          <CSVExportButton level="product" />
           <Button
             variant="outlined"
             size="small"

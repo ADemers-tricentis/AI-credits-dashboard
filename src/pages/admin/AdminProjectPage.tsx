@@ -12,6 +12,8 @@ import TextFieldCollapsible from '@tricentis/aura/components/TextFieldCollapsibl
 import Tag from '@tricentis/aura/components/Tag.js';
 import BurnRateCard from '../../components/BurnRateCard';
 import UserRankingTable from '../../components/UserRankingTable';
+import CSVExportButton from '../../components/CSVExportButton';
+import DateRangeFilter from '../../components/DateRangeFilter';
 import { PROJECTS, PRODUCTS, DAILY_USAGE } from '../../data/mock';
 import { useAppContext } from '../../context/AppContext';
 
@@ -34,6 +36,10 @@ export default function AdminProjectPage() {
         <BreadcrumbsItem label={product.name} component={Link} to={`/admin/products/${product.id}`} />
         <Typography color="text.primary">{project.name}</Typography>
       </Breadcrumbs>
+
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <DateRangeFilter />
+      </Box>
 
       {/* Project summary card */}
       <Card variant="outlined">
@@ -80,14 +86,17 @@ export default function AdminProjectPage() {
           <Typography variant="subtitle1" fontWeight={600}>
             Member Rankings ({project.memberIds.length} members)
           </Typography>
-          <TextFieldCollapsible
-            placeholder="Search members"
-            value={memberSearch}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMemberSearch(e.target.value)}
-            size="small"
-            icon={<SearchOutlined fontSize="small" />}
-            tooltipTitle="Search members"
-          />
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <CSVExportButton level="user" projectId={project.id} />
+            <TextFieldCollapsible
+              placeholder="Search members"
+              value={memberSearch}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMemberSearch(e.target.value)}
+              size="small"
+              icon={<SearchOutlined fontSize="small" />}
+              tooltipTitle="Search members"
+            />
+          </Box>
         </Box>
         <Card variant="outlined">
           <UserRankingTable

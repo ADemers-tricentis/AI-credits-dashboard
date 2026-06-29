@@ -1,4 +1,4 @@
-import type { Tenant, Product, Project, User, CreditEvent, Alert, DailyUsage } from '../types';
+import type { Tenant, Product, Project, User, CreditEvent, Alert, DailyUsage, DateRange } from '../types';
 
 export const USERS: User[] = [
   { id: 'u1', name: 'Maria Santos', email: 'maria.santos@tricentis-demo.com', role: 'lead', projectIds: ['p-qt-1', 'p-qt-2'] },
@@ -143,17 +143,20 @@ export function generateCreditEvents(): CreditEvent[] {
 
 export const CREDIT_EVENTS = generateCreditEvents();
 
-export function getUserCreditsInProject(userId: string, projectId: string): number {
-  return CREDIT_EVENTS.filter((e) => e.userId === userId && e.projectId === projectId)
+export function getUserCreditsInProject(userId: string, projectId: string, dateRange?: DateRange): number {
+  const since = dateRange ? getDateRangeStart(dateRange) : null;
+  return CREDIT_EVENTS
+    .filter((e) => e.userId === userId && e.projectId === projectId && (!since || new Date(e.timestamp) >= since))
     .reduce((sum, e) => sum + e.credits, 0);
 }
 
-export function getProjectUserCredits(projectId: string): Array<{ user: User; credits: number; requestCount: number }> {
+export function getProjectUserCredits(projectId: string, dateRange?: DateRange): Array<{ user: User; credits: number; requestCount: number }> {
   const project = PROJECTS.find((p) => p.id === projectId)!;
+  const since = dateRange ? getDateRangeStart(dateRange) : null;
   return project.memberIds
     .map((uid) => {
       const user = USERS.find((u) => u.id === uid)!;
-      const events = CREDIT_EVENTS.filter((e) => e.userId === uid && e.projectId === projectId);
+      const events = CREDIT_EVENTS.filter((e) => e.userId === uid && e.projectId === projectId && (!since || new Date(e.timestamp) >= since));
       return {
         user,
         credits: events.reduce((s, e) => s + e.credits, 0),
@@ -161,6 +164,16 @@ export function getProjectUserCredits(projectId: string): Array<{ user: User; cr
       };
     })
     .sort((a, b) => b.credits - a.credits);
+}
+
+export function getDateRangeStart(range: DateRange): Date {
+  const now = new Date();
+  switch (range) {
+    case 'day': { const d = new Date(now); d.setDate(d.getDate() - 1); return d; }
+    case 'week': { const d = new Date(now); d.setDate(d.getDate() - 7); return d; }
+    case 'month': { const d = new Date(now); d.setDate(d.getDate() - 30); return d; }
+    default: { const d = new Date(now); d.setDate(d.getDate() - 90); return d; }
+  }
 }
 
 export function calcBurnRate(dailyUsage: DailyUsage[], windowDays: number): number {

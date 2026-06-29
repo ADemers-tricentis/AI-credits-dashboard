@@ -6,7 +6,7 @@ import TableRow from '@mui/material/TableRow';
 import TableFooter from '@mui/material/TableFooter';
 import Typography from '@mui/material/Typography';
 import Tag from '@tricentis/aura/components/Tag.js';
-import { PROJECTS, PRODUCTS, CREDIT_EVENTS } from '../data/mock';
+import { PROJECTS, PRODUCTS, CREDIT_EVENTS, getDateRangeStart } from '../data/mock';
 import { useAppContext } from '../context/AppContext';
 
 const PRODUCT_COLORS: Record<string, 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'> = {
@@ -17,9 +17,10 @@ const PRODUCT_COLORS: Record<string, 'default' | 'primary' | 'secondary' | 'erro
 };
 
 export default function ICAttributionTable() {
-  const { currentUserId } = useAppContext();
+  const { currentUserId, dateRange } = useAppContext();
+  const since = getDateRangeStart(dateRange);
 
-  const myEvents = CREDIT_EVENTS.filter((e) => e.userId === currentUserId);
+  const myEvents = CREDIT_EVENTS.filter((e) => e.userId === currentUserId && new Date(e.timestamp) >= since);
 
   const rows = PROJECTS
     .filter((p) => p.memberIds.includes(currentUserId))

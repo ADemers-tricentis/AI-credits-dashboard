@@ -12,6 +12,7 @@ import TextFieldCollapsible from '@tricentis/aura/components/TextFieldCollapsibl
 import Tag from '@tricentis/aura/components/Tag.js';
 import BurnRateCard from '../../components/BurnRateCard';
 import UserRankingTable from '../../components/UserRankingTable';
+import DateRangeFilter from '../../components/DateRangeFilter';
 import { PROJECTS, PRODUCTS, DAILY_USAGE } from '../../data/mock';
 import { useAppContext } from '../../context/AppContext';
 
@@ -29,10 +30,13 @@ export default function LeadProjectPage() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Breadcrumbs>
-        <BreadcrumbsItem label="My Projects" component={Link} to="/lead" />
-        <Typography color="text.primary">{project.name}</Typography>
-      </Breadcrumbs>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+        <Breadcrumbs>
+          <BreadcrumbsItem label="My Projects" component={Link} to="/lead" />
+          <Typography color="text.primary">{project.name}</Typography>
+        </Breadcrumbs>
+        <DateRangeFilter />
+      </Box>
 
       <Card variant="outlined">
         <CardContent>

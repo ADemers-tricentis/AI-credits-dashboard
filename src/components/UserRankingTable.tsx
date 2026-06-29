@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Tag from '@tricentis/aura/components/Tag.js';
 import ChipSubtle from '@tricentis/aura/components/ChipSubtle.js';
 import { getProjectUserCredits } from '../data/mock';
+import { useAppContext } from '../context/AppContext';
 
 type Props = {
   projectId: string;
@@ -16,7 +17,8 @@ type Props = {
 };
 
 export default function UserRankingTable({ projectId, totalBudget, searchQuery }: Props) {
-  const rows = getProjectUserCredits(projectId);
+  const { dateRange } = useAppContext();
+  const rows = getProjectUserCredits(projectId, dateRange);
   const filtered = searchQuery
     ? rows.filter((r) => r.user.name.toLowerCase().includes(searchQuery.toLowerCase()))
     : rows;
